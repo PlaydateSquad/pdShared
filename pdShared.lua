@@ -83,6 +83,7 @@ function shared.rename(path, newPath)
 end
 
 local datastore = {}
+shared.datastore = datastore
 
 function datastore.write(table, filename, pretty_print)
     return pd.datastore.write(table, _path .. filename, pretty_print)
@@ -104,6 +105,5 @@ function datastore.readImage(path)
     return pd.datastore.readImage(_path .. path)
 end
 
-shared.datastore = datastore
 file._shared = file.shared  -- Just in case
 file.shared = shared

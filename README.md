@@ -9,7 +9,7 @@ import "pdShared"
 local shared <const> = playdate.file.shared
 
 shared.init("Data")
--- Create a json file at /Shared/com.example.mygame/Data/test.json
+-- Create a json file at /Shared/Data/com.example.mygame/test.json
 shared.datastore.write({foo="bar"}, "test")
 printTable(shared.listFiles("."))
 ```
