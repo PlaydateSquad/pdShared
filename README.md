@@ -8,6 +8,7 @@ import "pdShared"
 
 local shared <const> = playdate.file.shared
 
+-- Creates /Shared/Data/com.example.mygame/ (if it doesn't exist)
 shared.init("Data")
 -- Create a json file at /Shared/Data/com.example.mygame/test.json
 shared.datastore.write({foo="bar"}, "test")
