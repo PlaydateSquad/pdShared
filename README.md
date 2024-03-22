@@ -63,8 +63,8 @@ The following functions match their [signatures from the SDK](https://sdk.play.d
 
 All functions match the [signatures from the SDK](https://sdk.play.date/Inside%20Playdate.html#M-datastore), but operate on files in the configured Shared folder:
 
-* `datastore.write(table, [filename], [pretty_print])`
-* `datastore.read([filename])`
-* `datastore.delete([filename])`
-* `datastore.writeImage(image, path)`
-* `datastore.readImage(path)`
+* `shared.datastore.write(table, [filename], [pretty_print])`
+* `shared.datastore.read([filename])`
+* `shared.datastore.delete([filename])`
+* `shared.datastore.writeImage(image, path)`
+* `shared.datastore.readImage(path)`
