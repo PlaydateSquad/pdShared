@@ -35,7 +35,7 @@ if shared.gameExists("com.example.mygame") then
     print("Game data exists")
 end
 -- Checks for the existence of /Shared/Achievements/com.example.mygame
-if shared.gameExists("com.example.mygame", "/Achievements") then
+if shared.gameExists("com.example.mygame", "Achievements") then
     print("Game data exists")
 end
 ```
@@ -44,6 +44,10 @@ end
 
 * `id` (string) - The optional id of the game. Defaults to a sanitized bundle id of the game.
 * `prefix` (string) - The optional path to the Shared folder. Defaults to nothing and places your game's folder in the root of `/Shared`.
+
+#### `playdate.file.shared.getPath()`
+
+Returns the path to the Shared folder configured with `init`.
 
 #### `playdate.file.shared`
 

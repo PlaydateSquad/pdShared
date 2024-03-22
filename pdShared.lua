@@ -1,6 +1,7 @@
 local pd <const> = playdate
 local file <const> = pd.file
 
+local ROOT = "/Shared/"
 local shared = {}
 
 function shared.getBundleId()
@@ -8,18 +9,19 @@ function shared.getBundleId()
 end
 
 function shared.gameExists(prefix, id)
+    local path = id
     if prefix ~= nil then
         if string.sub(prefix, -1) ~= "/" then
             prefix = prefix .. "/"
         end
-        id = prefix .. id
+        path = prefix .. id
     end
-    return pd.file.exists(id)
+    return pd.file.exists(ROOT..path)
 end
 
 local _prefix = ""
 local _id = shared.getBundleId()
-local _path = "/Shared/" .. _prefix .. _id
+local _path = ROOT .. _prefix .. _id
 
 function shared.init(prefix, id)
     if prefix ~= nil then
@@ -32,7 +34,7 @@ function shared.init(prefix, id)
         _id = id
     end
 
-    _path = "/Shared/" .. _prefix .. _id .. "/"
+    _path = ROOT .. _prefix .. _id .. "/"
     if not file.isdir(_path) then
         file.mkdir(_path)
     end
