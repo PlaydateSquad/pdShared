@@ -7,14 +7,16 @@ A small library to make working with the Shared folder in playdate easier
 import "pdShared"
 
 local shared <const> = playdate.file.shared
+
 shared.init("Data")
 -- Create a json file at /Shared/com.example.mygame/Data/test.json
 shared.datastore.write({foo="bar"}, "test")
+printTable(shared.listFiles("."))
 ```
 
 ## Functions
 
-Most of the functions match the [playdate.file/playdate.datastore](https://sdk.play.date/2.4.2/Inside%20Playdate.html#file) API, but operate relative to the Shared folder configured ini `init`.
+Most of the functions match the playdate [file/datastore API](https://sdk.play.date/Inside%20Playdate.html#file) but operate relative to the Shared folder configured with `init`.
 
 #### playdate.file.shared.getBundleId()
 
@@ -44,7 +46,7 @@ end
 
 #### playdate.file.shared
 
-The following functions match their signatures from the SDK, but operate on files in the configured Shared folder:
+The following functions match their [signatures from the SDK](https://sdk.play.date/Inside%20Playdate.html#M-file), but operate on files in the configured Shared folder:
 
 * `shared.open(path, [mode])`
 * `shared.listFiles(path, [showhidden])`
@@ -59,7 +61,7 @@ The following functions match their signatures from the SDK, but operate on file
 
 #### playdate.file.shared.datastore
 
-All functions match the signatures for the original functions, but operate on files in the configured Shared folder:
+All functions match the [signatures from the SDK](https://sdk.play.date/Inside%20Playdate.html#M-datastore), but operate on files in the configured Shared folder:
 
 * `datastore.write(table, [filename], [pretty_print])`
 * `datastore.read([filename])`
