@@ -6,18 +6,18 @@ A small library to make working with the Shared folder in playdate easier
 ```lua
 import "pdShared"
 
-local shared <const> = playdate.file.shared
-
 -- Creates /Shared/Data/com.example.mygame/ (if it doesn't exist)
-shared.init("Data")
+local shared <const> = playdate.file.shared("Data")
+
 -- Create a json file at /Shared/Data/com.example.mygame/test.json
 shared.datastore.write({foo="bar"}, "test")
+-- Print out the file
 printTable(shared.listFiles("."))
 ```
 
 ## Functions
 
-Most of the functions match the playdate [file/datastore API](https://sdk.play.date/Inside%20Playdate.html#file) but operate relative to the Shared folder configured with `init`.
+Most of the functions match the playdate [file/datastore API](https://sdk.play.date/Inside%20Playdate.html#file) but operate relative to the Shared folder.
 
 #### `playdate.file.shared.getBundleId()`
 
@@ -40,18 +40,18 @@ if shared.gameExists("com.example.mygame", "Achievements") then
 end
 ```
 
-#### `playdate.file.shared.init([id], [prefix])`
+#### `playdate.file.shared([id], [prefix])`
 
 * `id` (string) - The optional id of the game. Defaults to a sanitized bundle id of the game.
 * `prefix` (string) - The optional path to the Shared folder. Defaults to nothing and places your game's folder in the root of `/Shared`.
 
 #### `playdate.file.shared.getPath()`
 
-Returns the path to the Shared folder configured with `init`.
+Returns the path to the Shared folder.
 
 #### `playdate.file.shared`
 
-The following functions match their [signatures from the SDK](https://sdk.play.date/Inside%20Playdate.html#M-file), but operate on files in the configured Shared folder:
+The following functions match their [signatures from the SDK](https://sdk.play.date/Inside%20Playdate.html#M-file), but operate on files in the Shared folder:
 
 * `shared.open(path, [mode])`
 * `shared.listFiles(path, [showhidden])`
@@ -66,7 +66,7 @@ The following functions match their [signatures from the SDK](https://sdk.play.d
 
 #### `playdate.file.shared.datastore`
 
-All functions match the [signatures from the SDK](https://sdk.play.date/Inside%20Playdate.html#M-datastore), but operate on files in the configured Shared folder:
+All functions match the [signatures from the SDK](https://sdk.play.date/Inside%20Playdate.html#M-datastore), but operate on files in the Shared folder:
 
 * `shared.datastore.write(table, [filename], [pretty_print])`
 * `shared.datastore.read([filename])`

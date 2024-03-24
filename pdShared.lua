@@ -2,7 +2,8 @@ local pd <const> = playdate
 local file <const> = pd.file
 
 local ROOT = "/Shared/"
-local shared = {}
+class("shared", nil, pd.file).extends()
+local shared = pd.file.shared
 
 function shared.getBundleId()
     return string.gsub(pd.metadata.bundleID, "^user%.%d+%.", "")
@@ -23,7 +24,7 @@ local _prefix = ""
 local _id = shared.getBundleId()
 local _path = ROOT .. _prefix .. _id
 
-function shared.init(prefix, id)
+function shared:init(prefix, id)
     if prefix ~= nil then
         if string.sub(prefix, -1) ~= "/" then
             prefix = prefix .. "/"
