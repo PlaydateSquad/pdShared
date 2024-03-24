@@ -5,8 +5,8 @@ local ROOT = "/Shared/"
 class("shared", nil, pd.file).extends()
 local shared = pd.file.shared
 
-function shared.getBundleId()
-    return string.gsub(pd.metadata.bundleID, "^user%.%d+%.", "")
+function shared.getBundleId(id)
+    return string.gsub(id or pd.metadata.bundleID, "^user%.%d+%.", "")
 end
 
 function shared.gameExists(prefix, id)
@@ -20,92 +20,86 @@ function shared.gameExists(prefix, id)
     return pd.file.exists(ROOT..path)
 end
 
-local _prefix = ""
-local _id = shared.getBundleId()
-local _path = ROOT .. _prefix .. _id
-
 function shared:init(prefix, id)
+    self._prefix = ""
+    self._id = shared.getBundleId()
+
     if prefix ~= nil then
         if string.sub(prefix, -1) ~= "/" then
             prefix = prefix .. "/"
         end
-        _prefix = prefix
+        self._prefix = prefix
     end
     if id ~= nil then
-        _id = id
+        self._id = id
     end
 
-    _path = ROOT .. _prefix .. _id .. "/"
-    if not file.isdir(_path) then
-        file.mkdir(_path)
+    self._path = ROOT .. self._prefix .. self._id .. "/"
+    if not file.isdir(self._path) then
+        file.mkdir(self._path)
+    end
+
+    local datastore = {}
+    self.datastore = datastore
+    function datastore.write(table, filename, pretty_print)
+        return pd.datastore.write(table, self._path .. filename, pretty_print)
+    end
+    function datastore.read(filename)
+        return pd.datastore.read(self._path .. filename)
+    end
+    function datastore.delete(filename)
+        return pd.datastore.delete(self._path .. filename)
+    end
+    function datastore.writeImage(image, path)
+        return pd.datastore.writeImage(image, self._path .. path)
+    end
+    function datastore.readImage(path)
+        return pd.datastore.readImage(self._path .. path)
     end
 end
 
-function shared.getPath()
-    return _path
+function shared:getPath()
+    return self._path
 end
 
-function shared.open(path, mode)
-    return file.open(_path .. path, mode)
+function shared:open(path, mode)
+    return file.open(self._path .. path, mode)
 end
 
-function shared.listFiles(path, showhidden)
-    return file.listFiles(_path .. path, showhidden)
+function shared:listFiles(path, showhidden)
+    return file.listFiles(self._path .. path, showhidden)
 end
 
-function shared.exists(path)
-    return file.exists(_path .. path)
+function shared:exists(path)
+    return file.exists(self._path .. path)
 end
 
-function shared.isdir(path)
-    return file.isdir(_path .. path)
+function shared:isdir(path)
+    return file.isdir(self._path .. path)
 end
 
-function shared.mkdir(path)
-    return shared.mkdir(_path .. path)
+function shared:mkdir(path)
+    return shared.mkdir(self._path .. path)
 end
 
-function shared.delete(path, recursive)
-    return file.delete(_path .. path, recursive)
+function shared:delete(path, recursive)
+    return file.delete(self._path .. path, recursive)
 end
 
-function shared.getSize(path)
-    return file.getSize(_path .. path)
+function shared:getSize(path)
+    return file.getSize(self._path .. path)
 end
 
-function shared.getType(path)
-    return file.getType(_path .. path)
+function shared:getType(path)
+    return file.getType(self._path .. path)
 end
 
-function shared.modTime(path)
-    return file.modTime(_path .. path)
+function shared:modTime(path)
+    return file.modTime(self._path .. path)
 end
 
-function shared.rename(path, newPath)
-    return file.rename(_path .. path, _path .. newPath)
-end
-
-local datastore = {}
-shared.datastore = datastore
-
-function datastore.write(table, filename, pretty_print)
-    return pd.datastore.write(table, _path .. filename, pretty_print)
-end
-
-function datastore.read(filename)
-    return pd.datastore.read(_path .. filename)
-end
-
-function datastore.delete(filename)
-    return pd.datastore.delete(_path .. filename)
-end
-
-function datastore.writeImage(image, path)
-    return pd.datastore.writeImage(image, _path .. path)
-end
-
-function datastore.readImage(path)
-    return pd.datastore.readImage(_path .. path)
+function shared:rename(path, newPath)
+    return file.rename(self._path .. path, self._path .. newPath)
 end
 
 file._shared = file.shared  -- Just in case
