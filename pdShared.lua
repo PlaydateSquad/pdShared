@@ -2,27 +2,52 @@ local pd <const> = playdate
 local file <const> = pd.file
 
 local ROOT = "/Shared/"
-class("shared", nil, pd.file).extends()
-local shared = pd.file.shared
+pdShared = {}
 
-function shared.getBundleId(id)
+function pdShared.getBundleId(id)
     return string.gsub(id or pd.metadata.bundleID, "^user%.%d+%.", "")
 end
 
-function shared.gameExists(prefix, id)
-    local path = id
-    if prefix ~= nil then
-        if string.sub(prefix, -1) ~= "/" then
-            prefix = prefix .. "/"
-        end
-        path = prefix .. id
+function pdShared.shareData(data)
+    if not file.isdir(ROOT .. ".meta") then
+        file.mkdir(ROOT .. ".meta")
     end
-    return pd.file.exists(ROOT..path)
+    local bundle = pdShared.getBundleId()
+    pd.datastore.write({
+        name = pd.metadata.name,
+        description = pd.metadata.description,
+        bundleID = bundle,
+        version = pd.metadata.version,
+        build = pd.metadata.build,
+        data = data
+    }, ROOT .. ".meta/" .. bundle)
 end
+
+function pdShared.gameExists(id)
+    return file.exists(ROOT .. ".meta/" .. pdShared.getBundleId(id) .. ".json")
+end
+
+function pdShared.getGames()
+    local games = file.listFiles(ROOT .. ".meta")
+    for index = 1, #games do
+        games[index] = string.gsub(games[index], "%.json$", "")
+    end
+    return games
+end
+
+function pdShared.loadData(id)
+    if pdShared.gameExists(id) then
+        local data = pd.datastore.read(ROOT .. ".meta/" .. pdShared.getBundleId(id))
+        return data.data, data
+    end
+end
+
+class("shared", nil, pd.file).extends()
+local shared = pd.file.shared
 
 function shared:init(prefix, id)
     self._prefix = ""
-    self._id = shared.getBundleId()
+    self._id = pdShared.getBundleId()
 
     if prefix ~= nil then
         if string.sub(prefix, -1) ~= "/" then
@@ -56,6 +81,17 @@ function shared:init(prefix, id)
     function datastore.readImage(path)
         return pd.datastore.readImage(self._path .. path)
     end
+end
+
+function shared.gameExists(prefix, id)
+    local path = id
+    if prefix ~= nil then
+        if string.sub(prefix, -1) ~= "/" then
+            prefix = prefix .. "/"
+        end
+        path = prefix .. id
+    end
+    return pd.file.exists(ROOT..path)
 end
 
 function shared:getPath()
