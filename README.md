@@ -71,7 +71,11 @@ Returns a list of all games that have shared data in the `/Shared/.meta` folder.
 printTable(pdShared.getGames())
 ```
 
-### `pdShared.loadData([id])`
+### `pdShared.shareData([data])`
+
+Shares data with other games. The data is saved in the `/Shared/.meta` folder with the current project's bundle id as the filename. The data table is optional, the function saves the game's metadata.
+
+#### `pdShared.loadData([id])`
 
 Loads the shared data of another game, or this game if not used. Returns the shared `data` key as the first value and the entire table as the second.
 
