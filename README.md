@@ -67,6 +67,9 @@ end
 
 Returns a list of all games that have shared data in the `/Shared/.meta` folder.
 
+##### Supported games
+* Pomo Post - `com.gammagames.pomodoro`
+
 ```lua
 printTable(pdShared.getGames())
 ```
@@ -74,6 +77,22 @@ printTable(pdShared.getGames())
 ### `pdShared.shareData([data])`
 
 Shares data with other games. The data is saved in the `/Shared/.meta` folder with the current project's bundle id as the filename. The data table is optional, the function saves the game's metadata.
+
+An example `com.gammagames.pomodoro.json` file:
+
+```json
+{
+	"buildNumber":"150",
+	"bundleID":"com.gammagames.pomodoro",
+	"data": {
+		"delivered":225,
+		"special_delivered":33
+	},
+	"description":"Delivery in 25 minutes or less!",
+	"name":"Pomo Post",
+	"version":"1.3"
+}
+```
 
 #### `pdShared.loadData([id])`
 
