@@ -3,7 +3,7 @@ A small library to make working with the Shared folder in playdate easier
 
 ### Cross-Game Data
 
-There's also a `pdShared` global that has tools for checking for cross-game ownership and sharing data between games:
+There's a `pdShared` global that has tools for checking for cross-game ownership and sharing data between games:
 
 ```lua
 -- Creates a shared data file at /Shared/.meta/com.example.mygame.json
