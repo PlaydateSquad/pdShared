@@ -76,9 +76,15 @@ printTable(pdShared.getGames())
 
 ### `pdShared.shareData([data])`
 
-Shares data with other games. The data is saved in the `/Shared/.meta` folder with the current project's bundle id as the filename. The data table is optional, the function saves the game's metadata.
+Shares data with other games. The data is saved in the `/Shared/.meta` folder with the current project's bundle id as the filename. The data table is optional, the function saves the game's metadata. An easy way to use it is to share your data when the game terminates:
 
-An example `com.gammagames.pomodoro.json` file:
+```lua
+function playdate.gameWillTerminate()
+    pdShared.shareData()
+end
+```
+
+An example `com.gammagames.pomodoro.json` that has shared data:
 
 ```json
 {
