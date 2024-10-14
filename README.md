@@ -67,12 +67,12 @@ end
 
 Returns a list of all games that have shared data in the `/Shared/.meta` folder.
 
-##### Supported games
-* Pomo Post - `com.gammagames.pomodoro`
-
 ```lua
 printTable(pdShared.getGames())
 ```
+
+##### Supported games
+* Pomo Post - `com.gammagames.pomodoro`
 
 ### `pdShared.shareData([data])`
 
