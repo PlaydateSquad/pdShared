@@ -1,7 +1,24 @@
 # pdShared
 A small library to make working with the Shared folder in playdate easier
 
-## Quick Start
+### Cross-Game Data
+
+There's a `pdShared` global that has tools for checking for cross-game ownership and sharing data between games:
+
+```lua
+-- Creates a shared data file at /Shared/.meta/com.example.mygame.json
+pdShared.shareData({foo="bar"})
+-- Check if another game has any shared data:
+pdShared.gameExists("com.example.yourgame")
+-- Get the shared data of another game:
+pdShared.loadData("com.example.yourgame")
+-- Get a list of all shared games:
+pdShared.getGames()
+```
+
+## Custom Directories
+
+If you want to save more complicated data, like themes, music, etc. you can use custom directories in the Shared folder:
 
 ```lua
 import "pdShared"
@@ -14,37 +31,102 @@ print("Shared path: " .. shared:getPath())
 shared.datastore.write({foo="bar"}, "test")
 -- Print out the file
 printTable(shared:listFiles("."))
+
+-- Creates /Shared/Data/My Game/ (if it doesn't exist)
+local shared_custom = playdate.file.shared("Data", "My Game")
+-- Create a json file at /Shared/Data/My Game/test.json
+shared_custom.datastore.write({foo="bar"}, "test")
+```
+
+To add saved data to another game, create the shared directory with the game's bundle id:
+
+```lua
+local your_shared = playdate.file.shared("Data", "com.example.yourgame")
+your_shared.datastore.write({foo="bar"}, "test")
 ```
 
 ## Functions
 
 Most of the functions match the playdate [file/datastore API](https://sdk.play.date/Inside%20Playdate.html#file) but operate relative to the Shared folder.
 
-#### `playdate.file.shared.getBundleId([id])`
+#### `pdShared.getBundleId([id])`
 
 Returns the sanitized bundle id of the game, which removes any `user.1234.` prefix in the case of sideloaded games. If id is not provided `playdate.metadata.bundleID` is used.
 
-#### `playdate.file.shared.gameExists(id, [prefix])`
+#### `pdShared.gameExists([id])`
 
-Checks if a game's data is present in the Shared folder. The prefix is optional and defaults to nothing.
+Checks if a game (or this game)'s data is present in the `/Shared/.meta` folder. 
 
 ```lua
-local shared <const> = playdate.file.shared
+if pdShared.gameExists("com.example.yourgame") then
+    print("Game data exists")
+end
+```
 
--- Checks for the existence of /Shared/com.example.mygame
-if shared.gameExists("com.example.mygame") then
-    print("Game data exists")
+#### `pdShared.getGames()`
+
+Returns a list of all games that have shared data in the `/Shared/.meta` folder.
+
+##### Supported games
+* Pomo Post - `com.gammagames.pomodoro`
+
+```lua
+printTable(pdShared.getGames())
+```
+
+### `pdShared.shareData([data])`
+
+Shares data with other games. The data is saved in the `/Shared/.meta` folder with the current project's bundle id as the filename. The data table is optional, the function saves the game's metadata. An easy way to use it is to share your data when the game terminates:
+
+```lua
+function playdate.gameWillTerminate()
+    pdShared.shareData()
 end
--- Checks for the existence of /Shared/Achievements/com.example.mygame
-if shared.gameExists("com.example.mygame", "Achievements") then
-    print("Game data exists")
-end
+```
+
+An example `com.gammagames.pomodoro.json` that has shared data:
+
+```json
+{
+	"buildNumber":"150",
+	"bundleID":"com.gammagames.pomodoro",
+	"data": {
+		"delivered":225,
+		"special_delivered":33
+	},
+	"description":"Delivery in 25 minutes or less!",
+	"name":"Pomo Post",
+	"version":"1.3"
+}
+```
+
+#### `pdShared.loadData([id])`
+
+Loads the shared data of another game, or this game if not used. Returns the shared `data` key as the first value and the entire table as the second.
+
+```lua
+local shared_data, shared_metadata = pdShared.loadData("com.example.yourgame")
 ```
 
 #### `playdate.file.shared([id], [prefix])`
 
 * `id` (string) - The optional id of the game. Defaults to a sanitized bundle id of the game.
 * `prefix` (string) - The optional path to the Shared folder. Defaults to nothing and places your game's folder in the root of `/Shared`.
+
+#### `playdate.file.shared.gameExists(id, [prefix])`
+
+Checks if a game's data is present in the Shared folder. The prefix is optional and defaults to nothing.
+
+```lua
+-- Checks for the existence of /Shared/com.example.mygame
+if shared.gameExists("com.example.mygame") then
+    print("Game data exists")
+end
+-- Checks for the existence of /Shared/Achievements/com.example.mygame
+if playdate.file.shared.gameExists("com.example.mygame", "Achievements") then
+    print("Game data exists")
+end
+```
 
 #### `playdate.file.shared:getPath()`
 
