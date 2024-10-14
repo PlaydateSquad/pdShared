@@ -18,7 +18,7 @@ function pdShared.shareData(data)
         description = pd.metadata.description,
         bundleID = bundle,
         version = pd.metadata.version,
-        build = pd.metadata.build,
+        buildNumber = pd.metadata.buildNumber,
         data = data
     }, ROOT .. ".meta/" .. bundle)
 end
