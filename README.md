@@ -76,7 +76,7 @@ printTable(pdShared.getGames())
 
 ### `pdShared.shareData([data])`
 
-Shares data with other games. The data is saved in the `/Shared/.meta` folder with the current project's bundle id as the filename. The data table is optional, the function saves the game's metadata. An easy way to use it is to share your data when the game terminates:
+Shares data with other games. The data is saved in the `/Shared/.meta` folder with the current project's bundle id as the filename. The function saves the game's metadata (from `pd.metadata`) with a `data` key if the optional data argument is provided. An easy way to use it is to share your data when the game terminates:
 
 ```lua
 function playdate.gameWillTerminate()
