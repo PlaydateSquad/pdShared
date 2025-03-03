@@ -74,6 +74,8 @@ printTable(pdShared.getGames())
 ##### Supported games
 * Pomo Post - `com.gammagames.pomodoro`
 * What the Taiji?! - `net.marquiskurt.what-the-taiji`
+* [XTRIS](https://play.date/games/xtris) - `com.fletchmakes.xtris`
+	* [XTRIS for Developers](https://fletchmakesstuff.com/blog/xtris-for-devs)
 
 ### `pdShared.shareData([data])`
 
